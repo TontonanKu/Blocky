@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Block Blast - Modern Edition</title>
+  <meta name="description" content="Game Block Blast modern dengan tema papan dan balok, leaderboard, daily quests, lucky spin, dan booster.">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2394202C'/><rect x='20' y='20' width='60' height='60' rx='10' fill='%23E58B24'/></svg>">
+</head>
+<body data-theme="crimson_neo">
+
+  <!-- Particle and FX Canvas -->
+  <canvas id="fx-canvas"></canvas>
+
+  <!-- Ghost Dragging Element -->
+  <div id="drag-ghost"></div>
+
+  <!-- App Wrapper -->
+  <div class="app-container">
+
+    <!-- ======================================================================
+         SCREEN 1: HOMEPAGE / MAIN MENU
+         ====================================================================== -->
+    <div class="screen-view active" id="screen-home">
+
+      <!-- Home Header -->
+      <header class="home-header">
+        <div class="player-profile-badge" id="home-profile-badge" title="Klik untuk edit profil">
+          <span class="player-avatar" id="home-player-avatar">🎮</span>
+          <span class="player-name" id="home-player-name">Blocky</span>
+        </div>
+        <div class="home-header-right">
+          <div class="header-coins-pill">
+            <svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="9" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
+              <circle cx="12" cy="12" r="5" stroke="#FFF" stroke-width="1.5"/>
+            </svg>
+            <span id="home-stat-coins">0</span>
+          </div>
+          <button class="btn-icon-btn" id="btn-home-settings" title="Pengaturan">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hero Section -->
+      <div class="home-hero">
+        <div class="hero-block-logo">
+          <div class="logo-cube cube-1"></div>
+          <div class="logo-cube cube-2"></div>
+          <div class="logo-cube cube-3"></div>
+          <div class="logo-cube cube-4"></div>
+        </div>
+
+        <div class="title-group">
+          <h1 class="title-outline hero-title">BLOCK BLAST</h1>
+          <div class="title-sub">NEO-BRUTALIST EDITION</div>
+        </div>
+
+        <!-- Highscore Showcase Card -->
+        <div class="home-highscore-card">
+          <div class="home-hs-badge">
+            <svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9H4a2 2 0 0 1-2-2V5h4M18 9h2a2 2 0 0 0 2-2V5h-4M4 5h16v6a7 7 0 0 1-14 0V5z"/>
+              <path d="M12 18v3M8 21h8"/>
+            </svg>
+            <span class="home-hs-label">REKOR TERBAIKMU</span>
+          </div>
+          <span class="home-hs-val" id="home-display-high-score">0 <small>PTS</small></span>
+        </div>
+
+        <!-- Main Action CTA: PLAY NOW -->
+        <button class="btn-play-game" id="btn-play-now">
+          <svg class="svg-icon-play" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+          <span class="play-text">MAIN SEKARANG</span>
+        </button>
+      </div>
+
+      <!-- Menu Grid Cards -->
+      <nav class="home-menu-grid">
+        <button class="menu-card-btn" id="btn-menu-daily">
+          <div class="menu-icon-wrap icon-gift">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 12 20 22 4 22 4 12"/>
+              <rect x="2" y="7" width="20" height="5"/>
+              <line x1="12" y1="22" x2="12" y2="7"/>
+              <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+              <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+            </svg>
+          </div>
+          <div class="menu-text-wrap">
+            <span class="menu-title">Hadiah Harian</span>
+            <span class="menu-desc">Klaim koin & misi</span>
+          </div>
+          <span class="badge-dot" id="badge-daily-alert"></span>
+        </button>
+
+        <button class="menu-card-btn" id="btn-menu-spin">
+          <div class="menu-icon-wrap icon-spin">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+            </svg>
+          </div>
+          <div class="menu-text-wrap">
+            <span class="menu-title">Lucky Spin</span>
+            <span class="menu-desc">Putar gratis harian</span>
+          </div>
+          <span class="badge-dot" id="badge-spin-alert"></span>
+        </button>
+
+        <button class="menu-card-btn" id="btn-menu-skins">
+          <div class="menu-icon-wrap icon-palette">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/>
+              <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/>
+              <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/>
+              <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/>
+              <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.3-.4-.4-.8-.4-1.3 0-.9.7-1.6 1.6-1.6h1.9c3.3 0 6-2.7 6-6 0-5.5-4.6-9.4-10.3-9.4z"/>
+            </svg>
+          </div>
+          <div class="menu-text-wrap">
+            <span class="menu-title">Tema & Skin</span>
+            <span class="menu-desc">Ganti gaya papan</span>
+          </div>
+        </button>
+
+        <button class="menu-card-btn" id="btn-menu-leaderboard">
+          <div class="menu-icon-wrap icon-trophy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 9H4a2 2 0 0 1-2-2V5h4M18 9h2a2 2 0 0 0 2-2V5h-4M4 5h16v6a7 7 0 0 1-14 0V5z"/>
+              <path d="M12 18v3M8 21h8"/>
+            </svg>
+          </div>
+          <div class="menu-text-wrap">
+            <span class="menu-title">Peringkat</span>
+            <span class="menu-desc">Skor tertinggi & histori</span>
+          </div>
+        </button>
+
+        <button class="menu-card-btn full-width" id="btn-menu-howto">
+          <div class="menu-icon-wrap icon-book">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+              <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            </svg>
+          </div>
+          <div class="menu-text-wrap">
+            <span class="menu-title">Panduan & Cara Bermain</span>
+            <span class="menu-desc">Pelajari strategi kombo & booster</span>
+          </div>
+        </button>
+
+        <!-- Donate Button with QRIS -->
+        <button class="menu-card-btn full-width btn-donate-home" id="btn-menu-donate">
+          <div class="menu-icon-wrap icon-heart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#EF4444" stroke="#DC2626"/>
+            </svg>
+          </div>
+          <div class="menu-text-wrap">
+            <span class="menu-title donate-title">💖 Donasi & Dukung (QRIS)</span>
+            <span class="menu-desc">Scan QRIS Kazura Store untuk dukung developer</span>
+          </div>
+          <span class="donate-pill-tag">QRIS</span>
+        </button>
+      </nav>
+
+    </div>
+
+    <!-- ======================================================================
+         SCREEN 2: IN-GAME PLAY SCREEN
+         ====================================================================== -->
+    <div class="screen-view hidden" id="screen-game">
+
+      <!-- Balanced In-Game Header Bar -->
+      <header class="game-header-bar">
+        <button class="btn-game-nav" id="btn-back-home" title="Kembali ke Menu Utama">
+          <svg class="svg-icon-sm" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+          </svg>
+          <span>Menu</span>
+        </button>
+
+        <!-- Unified Score Display Card -->
+        <div class="in-game-score-card">
+          <div class="score-segment">
+            <span class="score-sub">SKOR</span>
+            <span class="score-num" id="stat-current-score">0</span>
+          </div>
+          <div class="score-divider"></div>
+          <div class="score-segment">
+            <span class="score-sub">TERBAIK</span>
+            <span class="score-num best" id="stat-high-score">0</span>
+          </div>
+        </div>
+
+        <div class="game-header-right">
+          <div class="header-coins-pill">
+            <svg class="svg-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="9" fill="#F59E0B" stroke="#D97706" stroke-width="2"/>
+              <circle cx="12" cy="12" r="5" stroke="#FFF" stroke-width="1.5"/>
+            </svg>
+            <span id="stat-coins">0</span>
+          </div>
+          <button class="btn-icon-btn" id="btn-game-settings" title="Pengaturan">
+            <svg class="svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Active Combo Streak Banner -->
+      <div class="streak-indicator hidden" id="streak-indicator">COMBO x2! 🔥</div>
+
+      <!-- 8x8 Board Wrapper -->
+      <main class="board-wrapper">
+        <div class="game-board" id="game-board">
+          <!-- 64 cells generated dynamically -->
+        </div>
+      </main>
+
+      <!-- 3-Slot Piece Tray (Dock) -->
+      <section class="tray-container">
+        <div class="tray-slot" id="tray-slot-0"></div>
+        <div class="tray-slot" id="tray-slot-1"></div>
+        <div class="tray-slot" id="tray-slot-2"></div>
+      </section>
+
+      <!-- Booster / Tool Bar with Modern SVGs -->
+      <footer class="action-bar">
+        <button class="btn-booster" data-type="bomb" title="Ledakkan area 3x3">
+          <div class="booster-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="13" r="8" fill="#1E293B" stroke="#0F172A"/>
+              <path d="M17 7l2-2M19 2l1 2M22 5l-2 1M14.5 9.5l2-2" stroke="#F59E0B" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="booster-name">BOM</span>
+          <span class="booster-count" id="booster-count-bomb">5</span>
+        </button>
+
+        <button class="btn-booster" data-type="hammer" title="Hancurkan 1 balok pilihan">
+          <div class="booster-icon-wrap">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M15 12l-8.5 8.5a1.4 1.4 0 0 1-2-2L13 10" stroke="#8B5A2B" stroke-width="2.5"/>
+              <path d="M18 4l2 2-3 3-2-2z" fill="#94A3B8" stroke="#475569"/>
+              <path d="M13 9l2 2-6 6-2-2z" fill="#64748B"/>
+            </svg>
+          </div>
+          <span class="booster-name">PALU</span>
+          <span class="booster-count" id="booster-count-hammer">5</span>
+        </button>
+
+        <button class="btn-booster" data-type="refresh" title="Acak ulang 3 balok baru">
+          <div class="booster-icon-wrap">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+            </svg>
+          </div>
+          <span class="booster-name">ACAK</span>
+          <span class="booster-count" id="booster-count-refresh">5</span>
+        </button>
+
+        <button class="btn-restart" id="btn-action-restart" title="Mulai Ulang Permainan">
+          <div class="booster-icon-wrap">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+          </div>
+          <span class="booster-name">RESET</span>
+        </button>
+      </footer>
+
+    </div>
+
+  </div>
+
+  <!-- ==========================================================================
+       MODALS
+       ========================================================================== -->
+
+  <!-- Modal: Leaderboard -->
+  <div class="modal-overlay" id="modal-leaderboard">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title-outline">🏆 Papan Peringkat</h3>
+        <button class="btn-close-modal" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="tab-controls">
+          <button class="tab-btn active" id="tab-btn-rank">Peringkat Global</button>
+          <button class="tab-btn" id="tab-btn-hist">Riwayat Pertandingan</button>
+        </div>
+        <div class="rank-list" id="leaderboard-view-rank"></div>
+        <div class="rank-list hidden" id="leaderboard-view-hist"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Skin & Theme Shop -->
+  <div class="modal-overlay" id="modal-skins">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title-outline">🎨 Tema Papan & Balok</h3>
+        <button class="btn-close-modal" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="skin-shop-list" id="skin-shop-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Cara Bermain (How to Play) -->
+  <div class="modal-overlay" id="modal-howto">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title-outline">📖 Cara Bermain</h3>
+        <button class="btn-close-modal" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="guide-card-deck">
+          <div class="guide-card">
+            <div class="guide-num">1</div>
+            <div class="guide-content">
+              <h4>Tarik & Pasang Balok</h4>
+              <p>Tarik salah satu dari 3 pilihan bentuk balok dari bawah ke petak papan 8x8. Letakkan di posisi kosong yang pas.</p>
+            </div>
+          </div>
+          <div class="guide-card">
+            <div class="guide-num">2</div>
+            <div class="guide-content">
+              <h4>Ledakkan Baris & Kolom</h4>
+              <p>Penuhi satu baris penuh (horisontal) atau kolom penuh (vertikal) untuk meledakkannya dan mengosongkan ruang papan.</p>
+            </div>
+          </div>
+          <div class="guide-card">
+            <div class="guide-num">3</div>
+            <div class="guide-content">
+              <h4>Raih Rentetan Kombo 🔥</h4>
+              <p>Hancurkan garis di setiap giliran berturut-turut untuk melipatgandakan perolehan skormu hingga berlipat ganda!</p>
+            </div>
+          </div>
+          <div class="guide-card">
+            <div class="guide-num">4</div>
+            <div class="guide-content">
+              <h4>Gunakan Booster Bantuan</h4>
+              <p>Gunakan Bom 💣 untuk meledakkan area 3x3, Palu 🔨 untuk memecah 1 balok terjebak, atau Acak 🔄 bila balok tidak cocok.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Daily Rewards & Quests -->
+  <div class="modal-overlay" id="modal-daily">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title-outline">🎁 Hadiah & Misi Harian</h3>
+        <button class="btn-close-modal" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="daily-section-title">📅 Login Beruntun 7 Hari</div>
+        <div class="daily-streak-grid" id="daily-streak-grid"></div>
+
+        <div class="daily-section-title" style="margin-top: 10px;">🎯 Misi Harian</div>
+        <div class="daily-quest-list" id="daily-quest-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Lucky Spin Wheel -->
+  <div class="modal-overlay" id="modal-spin">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title-outline">🎡 Lucky Spin</h3>
+        <button class="btn-close-modal" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="spin-container">
+          <div class="wheel-stage">
+            <div class="wheel-needle"></div>
+            <canvas id="spin-wheel-canvas" width="280" height="280"></canvas>
+          </div>
+          <div class="spin-action-area">
+            <button class="btn-primary-action" id="btn-do-spin">PUTAR SEKARANG</button>
+            <span class="spin-status-label" id="spin-status-label">Putaran gratis harian tersedia!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Donation & QRIS -->
+  <div class="modal-overlay" id="modal-donate">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title-outline">💖 Dukung Pengembang</h3>
+        <button class="btn-close-modal" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body donate-modal-body">
+        <div class="donate-info-card">
+          <span class="merchant-name">KAZURA STORE</span>
+          <span class="nmid-tag">NMID : ID1025393427014 • A01</span>
+          <p class="donate-desc">Dukungan donasi Anda sangat membantu pemeliharaan server dan update fitur game Block Blast berikutnya!</p>
+        </div>
+
+        <div class="qris-img-container">
+          <img src="assets/qris.png" alt="QRIS Kazura Store" class="qris-image">
+        </div>
+
+        <div class="qris-instructions">
+          <span>✅ Scan dengan GoPay, OVO, DANA, ShopeePay, LinkAja, BCA, Mandiri, BRI, BNI, dan aplikasi m-Banking apa pun berlogo QRIS.</span>
+        </div>
+
+        <button class="btn-primary-action" id="btn-close-donate">TUTUP</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Settings -->
+  <div class="modal-overlay" id="modal-settings">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title-outline">⚙️ Pengaturan</h3>
+        <button class="btn-close-modal" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="settings-group">
+          <div class="setting-row">
+            <span class="setting-label">Efek Suara (SFX)</span>
+            <label class="switch">
+              <input type="checkbox" id="toggle-sfx" checked>
+              <span class="slider-round"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Volume SFX</span>
+            <div class="slider-control">
+              <input type="range" id="slider-sfx-vol" min="0" max="100" value="80">
+            </div>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Musik Santai (BGM)</span>
+            <label class="switch">
+              <input type="checkbox" id="toggle-bgm">
+              <span class="slider-round"></span>
+            </label>
+          </div>
+          <div class="setting-row">
+            <span class="setting-label">Volume Musik</span>
+            <div class="slider-control">
+              <input type="range" id="slider-bgm-vol" min="0" max="100" value="40">
+            </div>
+          </div>
+          <div style="margin-top: 14px;">
+            <button class="btn-danger" id="btn-reset-game-data">Reset Seluruh Data & Koin</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Profile Edit -->
+  <div class="modal-overlay" id="modal-profile">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title-outline">👤 Profil Pemain</h3>
+        <button class="btn-close-modal" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="profile-edit-body">
+          <label class="input-label" for="input-profile-name">NAMA NICKNAME</label>
+          <input type="text" id="input-profile-name" class="input-text" maxlength="15" placeholder="Masukkan nama..." value="Blocky">
+
+          <label class="input-label" style="margin-top: 8px;">PILIH AVATAR</label>
+          <div class="avatar-grid">
+            <div class="avatar-choice selected">🎮</div>
+            <div class="avatar-choice">👑</div>
+            <div class="avatar-choice">⚡</div>
+            <div class="avatar-choice">🚀</div>
+            <div class="avatar-choice">🦊</div>
+            <div class="avatar-choice">💎</div>
+            <div class="avatar-choice">👾</div>
+            <div class="avatar-choice">🎯</div>
+          </div>
+
+          <button class="btn-primary-action" id="btn-save-profile" style="margin-top: 12px; width: 100%;">SIMPAN PROFIL</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Game Over -->
+  <div class="modal-overlay" id="modal-gameover">
+    <div class="modal-card">
+      <div class="modal-body">
+        <div class="gameover-summary">
+          <h2 class="go-headline">GAME OVER</h2>
+          <div class="go-score-box">
+            <span class="label">SKOR AKHIR</span>
+            <span class="val" id="go-final-score">0</span>
+            <span class="badge-new-record" id="go-new-high-badge" style="display: none;">🏆 REKOR BARU!</span>
+          </div>
+
+          <div class="go-stats-row">
+            <div class="go-stat-item">
+              <span class="k">Skor Tertinggi</span>
+              <span class="v" id="go-high-score">0</span>
+            </div>
+            <div class="go-stat-item">
+              <span class="k">Kombo Maksimal</span>
+              <span class="v" id="go-max-combo">x0</span>
+            </div>
+            <div class="go-stat-item">
+              <span class="k">Baris Hancur</span>
+              <span class="v" id="go-lines-cleared">0</span>
+            </div>
+          </div>
+
+          <div class="go-actions-row">
+            <button class="btn-primary-action" id="btn-go-retry">MAIN LAGI 🚀</button>
+            <button class="btn-secondary-action" id="btn-go-home">MENU UTAMA 🏠</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Pill -->
+  <div class="game-toast" id="game-toast">Selamat datang di Block Blast!</div>
+
+  <!-- Game Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/skins.js"></script>
+  <script src="js/pieces.js"></script>
+  <script src="js/particles.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
